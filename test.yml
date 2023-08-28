@@ -1,0 +1,6 @@
+- name: "read tenancy from oci config file"
+  hosts: localhost
+
+  tasks:
+  - ansible.builtin.set_fact:
+      oci_tenancy: "{{ lookup('ansible.builtin.file', '~/.oci/config') }}"
