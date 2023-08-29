@@ -1,0 +1,10 @@
+- name: "Fetches details about one or multiple AvailabilityDomain resources in Oracle Cloud Infrastructure"
+  oracle.oci.oci_identity_availability_domain_facts:
+    compartment_id: "{{ oci.compartment_id }}"
+    config_file_location: "{{ oci.config.file_location }}"
+    config_profile_name: "{{ oci.config.profile_name }}"
+  register: oci_availability_domains
+
+- name: "Debug OCI AvailabilityDomain resources"
+  ansible.builtin.debug:
+    msg: "{{ oci_availability_domains }}"

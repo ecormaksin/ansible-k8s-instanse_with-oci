@@ -1,0 +1,5 @@
+oci:
+  compartment_id: ocid1.tenancy.oc1..aaaaaaaazxfzqd3l2ei3yjwksntwm5qbiri3myp5owfnwcdxkjbreyro4faq
+  config:
+    file_location: ~/.oci/config
+    profile_name: DEFAULT

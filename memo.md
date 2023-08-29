@@ -22,3 +22,5 @@
   ```shell
   ansible-galaxy collection install oracle.oci
   ```
+
+- Playbookの実行時に `oci python sdk required for this module.` でエラーになり、Ansible設定ファイルの `interpreter_python` へパスを指定する必要があった。(pyenvでPythonをインストールしたため？)
