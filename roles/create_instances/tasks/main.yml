@@ -1,10 +1,16 @@
-- name: "Fetches details about one or multiple AvailabilityDomain resources in Oracle Cloud Infrastructure"
-  oracle.oci.oci_identity_availability_domain_facts:
-    compartment_id: "{{ oci.compartment_id }}"
-    config_file_location: "{{ oci.config.file_location }}"
-    config_profile_name: "{{ oci.config.profile_name }}"
-  register: oci_availability_domains
+# - name: "Fetches details about one or multiple AvailabilityDomain resources in Oracle Cloud Infrastructure"
+#   oracle.oci.oci_identity_availability_domain_facts:
+#     compartment_id: "{{ oci.compartment_id }}"
+#   register: oci_availability_domains
 
-- name: "Debug OCI AvailabilityDomain resources"
+# - name: "Debug OCI AvailabilityDomain resources"
+#   ansible.builtin.debug:
+#     msg: "{{ oci_availability_domains }}"
+
+- name: "Fetches details about one or multiple ComputeGlobalImageCapabilitySchema resources in Oracle Cloud Infrastructure"
+  oracle.oci.oci_compute_global_image_capability_schema_facts:
+  register: result
+
+- name: "Debug ComputeGlobalImageCapabilitySchema"
   ansible.builtin.debug:
-    msg: "{{ oci_availability_domains }}"
+    msg: "{{ result }}"
