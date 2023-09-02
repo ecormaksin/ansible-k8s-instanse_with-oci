@@ -15,9 +15,9 @@
     - 構成ファイルを作成する。
       - <https://docs.oracle.com/ja-jp/iaas/Content/API/Concepts/sdkconfig.htm>
       - デフォルトのファイル パスは `~/.oci/config` (Windowsの場合はPowershellから `mkdir %HOMEDRIVE%%HOMEPATH%\.oci` で作成)
-        - 変更したい場合は、環境変数 `OCI_CONFIG_FILE` へ ファイル パスを指定する。
+        - 変更したい場合は、環境変数 `OCI_CONFIG_FILE` へファイル パスを指定する。
       - デフォルトのプロファイルは `DEFAULT`
-        - 変更したい場合は、環境変数 `OCI_CONFIG_PROFILE` へ ファイル パスを指定する。
+        - 変更したい場合は、環境変数 `OCI_CONFIG_PROFILE` へプロファイル名を指定する。
 
 - OCI Ansible collection のインストール
 

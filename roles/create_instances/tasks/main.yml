@@ -7,10 +7,11 @@
 #   ansible.builtin.debug:
 #     msg: "{{ oci_availability_domains }}"
 
-- name: "Fetches details about one or multiple ComputeGlobalImageCapabilitySchema resources in Oracle Cloud Infrastructure"
-  oracle.oci.oci_compute_global_image_capability_schema_facts:
+- name: "get VCNs"
+  oracle.oci.oci_network_vcn_facts:
+    compartment_id: "{{ oci.compartment_id }}"
   register: result
 
-- name: "Debug ComputeGlobalImageCapabilitySchema"
+- name: "Debug VCNs"
   ansible.builtin.debug:
     msg: "{{ result }}"
