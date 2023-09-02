@@ -2,7 +2,7 @@
   vars:
     instance_shape: VM.Standard.A1.Flex
     # select id from output of the following command (OCI CIL and jq needed).
-    # oci compute image list --compartment-id $OCI_COMPARTMENT_ID --operating-system "Canonical Ubuntu" --operating-system-version "22.04" | jq '[.data[] | {"display-name": ."display-name", id: .id}]'
+    # oci compute image list --compartment-id $OCI_COMPARTMENT_ID --operating-system "Canonical Ubuntu" --operating-system-version "22.04" | jq '[.data[] | select(."display-name" | test("^Canonical-Ubuntu-[0-9]+.[0-9]+-[0-9]+", "gimx")) | {"display-name": ."display-name", id: .id}]'
     image_id: ocid1.image.oc1.ap-osaka-1.aaaaaaaau2asu7iugaautay6ugxhliqr6nw7zumfapdykbssyjazywwbpzmq
   roles:
     - create_instances
