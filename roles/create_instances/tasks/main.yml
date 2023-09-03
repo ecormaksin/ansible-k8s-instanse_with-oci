@@ -1,17 +1,34 @@
-# - name: "Fetches details about one or multiple AvailabilityDomain resources in Oracle Cloud Infrastructure"
-#   oracle.oci.oci_identity_availability_domain_facts:
+# - name: "Get VCNs"
+#   oracle.oci.oci_network_vcn_facts:
 #     compartment_id: "{{ oci.compartment_id }}"
-#   register: oci_availability_domains
+#   register: vcn_list
 
-# - name: "Debug OCI AvailabilityDomain resources"
-#   ansible.builtin.debug:
-#     msg: "{{ oci_availability_domains }}"
+# - name: "Filter the target VCN"
+#   ansible.builtin.set_fact:
+#     vcn_id: "{{ vcn_list | community.general.json_query(vcn_filter_expression)}}"
+#   vars:
+#     vcn_filter_expression: "vcns[?display_name=='{{ oci.vcn.display_name }}'].id | [0]"
 
-- name: "get VCNs"
-  oracle.oci.oci_network_vcn_facts:
+- name: "Create a VCN"
+  oracle.oci.oci_network_vcn:
     compartment_id: "{{ oci.compartment_id }}"
-  register: result
+    display_name: "{{ oci.vcn.display_name }}"
+    cidr_block: "{{ vcn_cidr_block }}"
+    dns_label: "{{ oci.vcn.dns_label }}"
+  register: vcn_createion_result
 
-- name: "Debug VCNs"
-  ansible.builtin.debug:
-    msg: "{{ result }}"
+- name: "Get OCID of the created VCN"
+  ansible.builtin.set_fact:
+    vcn_id: "{{ vcn_createion_result.vcn.id }}"
+
+- name: "Create an Internet Gateway"
+  oracle.oci.oci_network_internet_gateway:
+    compartment_id: "{{ oci.compartment_id }}"
+    vcn_id: "{{ vcn_id }}"
+    name: "{{ oci.internet_gateway.name }}"
+    is_enabled: true
+    state: 'present'
+  register: ig_creation_result
+
+- set_fact:
+    ig_id: "{{ ig_creation_result.internet_gateway.id }}"

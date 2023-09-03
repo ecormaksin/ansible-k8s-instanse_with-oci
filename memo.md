@@ -27,17 +27,19 @@
 
 - Playbookの実行時に `oci python sdk required for this module.` でエラーになり、Ansible設定ファイルの `interpreter_python` へパスを指定する必要があった。(pyenvでPythonをインストールしたため？)
 
+- Ansible Playbookのタスク実行結果の出力(json)を利用するため、`community.general.json_query` を使う。このモジュールはJMESPathを呼び出しているので、コントロラー上にJMESPath(Ubuntuのパッケージマネージャーでは`jq`)が必要。また、Pythonからも参照できる必要があるので、`pip install jmespath`を実行してパッケージをインストールする。
+
 ## Playbookの実行
 
 ```shell
 # Syntax Check
-ansible-playbook -vv --syntax-check -i ./inventory/<target_inventory_filename>.yml --extra-vars @vars_per_env.yml <target_playbook_filename>.yml
+ansible-playbook -vv --syntax-check -i ./inventories/<target_inventory_filename>.yml --extra-vars @vars_per_env.yml ./playbooks/<target_playbook_filename>.yml
 
 # Dry Run
-ansible-playbook -vv --check -i ./inventory/<target_inventory_filename>.yml --extra-vars @vars_per_env.yml <target_playbook_filename>.yml
+ansible-playbook -vv --check -i ./inventories/<target_inventory_filename>.yml --extra-vars @vars_per_env.yml ./playbooks/<target_playbook_filename>.yml
 
 # Execute
-ansible-playbook -vv -i ./inventory/<target_inventory_filename>.yml --extra-vars @vars_per_env.yml <target_playbook_filename>.yml
+ansible-playbook -vv -i ./inventories/<target_inventory_filename>.yml --extra-vars @vars_per_env.yml ./playbooks/<target_playbook_filename>.yml
 ```
 
 ## その他記録用
