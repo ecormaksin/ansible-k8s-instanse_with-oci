@@ -1,15 +1,15 @@
-# - name: "Get VCNs"
+# - name: "Get Vcns"
 #   oracle.oci.oci_network_vcn_facts:
 #     compartment_id: "{{ oci.compartment_id }}"
 #   register: vcn_list
 
-# - name: "Filter the target VCN"
+# - name: "Filter the target Vcn"
 #   ansible.builtin.set_fact:
 #     vcn_id: "{{ vcn_list | community.general.json_query(vcn_filter_expression)}}"
 #   vars:
 #     vcn_filter_expression: "vcns[?display_name=='{{ oci.vcn.display_name }}'].id | [0]"
 
-- name: "Create a VCN"
+- name: "Create a Vcn"
   oracle.oci.oci_network_vcn:
     compartment_id: "{{ oci.compartment_id }}"
     display_name: "{{ oci.vcn.display_name }}"
@@ -17,11 +17,11 @@
     dns_label: "{{ oci.vcn.dns_label }}"
   register: vcn_createion_result
 
-- name: "Get OCID of the created VCN"
+- name: "Get OCID of the created Vcn"
   ansible.builtin.set_fact:
     vcn_id: "{{ vcn_createion_result.vcn.id }}"
 
-- name: "Create an Internet Gateway"
+- name: "Create an InternetGateway"
   oracle.oci.oci_network_internet_gateway:
     compartment_id: "{{ oci.compartment_id }}"
     vcn_id: "{{ vcn_id }}"
@@ -30,5 +30,27 @@
     state: 'present'
   register: ig_creation_result
 
-- set_fact:
-    ig_id: "{{ ig_creation_result.internet_gateway.id }}"
+- name: "Get OCID of the created InternetGateway"
+  ansible.builtin.set_fact:
+    internet_gateway_id: "{{ ig_creation_result.internet_gateway.id }}"
+
+- name: "Create a RouteTable"
+  oracle.oci.oci_network_route_table:
+    compartment_id: "{{ oci.compartment_id }}"
+    vcn_id: "{{ vcn_id }}"
+    name: "{{ oci.route_table.name }}"
+    route_rules:
+      - cidr_block: "{{ quad_zero_route }}"
+        network_entity_id: "{{ internet_gateway_id }}"
+    state: 'present'
+  register: rt_creation_result
+
+- name: "Get OCID of the created RouteTable"
+  ansible.builtin.set_fact:
+    route_table_id: "{{ rt_creation_result.route_table.id }}"
+
+- name: "Create a SecurityList"
+  oracle.oci.oci_network_security_list:
+    egress_security_rules:
+      - destination: "{{ quad_zero_route }}"
+        protocol: "all"
