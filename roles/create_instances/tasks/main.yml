@@ -51,6 +51,78 @@
 
 - name: "Create a SecurityList"
   oracle.oci.oci_network_security_list:
+    compartment_id: "{{ oci.compartment_id }}"
+    name: "{{ oci.security_list.name }}"
+    vcn_id: "{{ vcn_id }}"
     egress_security_rules:
       - destination: "{{ quad_zero_route }}"
         protocol: "all"
+    ingress_security_rules:
+      - description: "SSH"
+        source: "{{ quad_zero_route }}"
+        protocol: "6" # TCP
+        tcp_options:
+          destination_port_range:
+            max: 22
+            min: 22
+      - description: "HTTP"
+        source: "{{ quad_zero_route }}"
+        protocol: "6" # TCP
+        tcp_options:
+          destination_port_range:
+            max: 80
+            min: 80
+      - description: "HTTPS"
+        source: "{{ quad_zero_route }}"
+        protocol: "6" # TCP
+        tcp_options:
+          destination_port_range:
+            max: 443
+            min: 443
+      - description: "Kubernetes API server"
+        source: "{{ quad_zero_route }}"
+        protocol: "6" # TCP
+        tcp_options:
+          destination_port_range:
+            max: 6443
+            min: 6443
+      - description: "Kubernetes etcd server client API"
+        source: "{{ quad_zero_route }}"
+        protocol: "6" # TCP
+        tcp_options:
+          destination_port_range:
+            max: 2380
+            min: 2379
+      - description: "Kubernetes Kubelet API"
+        source: "{{ quad_zero_route }}"
+        protocol: "6" # TCP
+        tcp_options:
+          destination_port_range:
+            max: 10250
+            min: 10250
+      - description: "Kubernetes kube-scheduler"
+        source: "{{ quad_zero_route }}"
+        protocol: "6" # TCP
+        tcp_options:
+          destination_port_range:
+            max: 10259
+            min: 10259
+      - description: "Kubernetes kube-controller-manager"
+        source: "{{ quad_zero_route }}"
+        protocol: "6" # TCP
+        tcp_options:
+          destination_port_range:
+            max: 10257
+            min: 10257
+      - description: "Kubernetes NodePort Services"
+        source: "{{ quad_zero_route }}"
+        protocol: "6" # TCP
+        tcp_options:
+          destination_port_range:
+            max: 32767
+            min: 30000
+  register: sl_creation_result
+
+- name: "Get OCID of the created SecurityList"
+  ansible.builtin.set_fact:
+    security_list_id: "{{ sl_creation_result.security_list.id }}"
