@@ -9,7 +9,7 @@
 #   vars:
 #     vcn_filter_expression: "vcns[?display_name=='{{ oci.vcn.display_name }}'].id | [0]"
 
-- name: "Create a Vcn"
+- name: "Create or Update a Vcn"
   oracle.oci.oci_network_vcn:
     compartment_id: "{{ oci.compartment_id }}"
     display_name: "{{ oci.vcn.display_name }}"
@@ -17,11 +17,13 @@
     dns_label: "{{ oci.vcn.dns_label }}"
   register: vcn_createion_result
 
-- name: "Get OCID of the created Vcn"
+- name: "Get OCID of the Vcn"
   ansible.builtin.set_fact:
     vcn_id: "{{ vcn_createion_result.vcn.id }}"
+    route_table_id: "{{ vcn_createion_result.vcn.default_route_table_id }}"
+    security_list_id: "{{ vcn_createion_result.vcn.default_security_list_id }}"
 
-- name: "Create an InternetGateway"
+- name: "Create or Update an InternetGateway"
   oracle.oci.oci_network_internet_gateway:
     compartment_id: "{{ oci.compartment_id }}"
     vcn_id: "{{ vcn_id }}"
@@ -30,30 +32,27 @@
     state: 'present'
   register: ig_creation_result
 
-- name: "Get OCID of the created InternetGateway"
+- name: "Get OCID of the InternetGateway"
   ansible.builtin.set_fact:
     internet_gateway_id: "{{ ig_creation_result.internet_gateway.id }}"
 
-- name: "Create a RouteTable"
+- name: "Update a RouteTable"
   oracle.oci.oci_network_route_table:
     compartment_id: "{{ oci.compartment_id }}"
     vcn_id: "{{ vcn_id }}"
+    id: "{{ route_table_id }}"
     name: "{{ oci.route_table.name }}"
     route_rules:
       - cidr_block: "{{ quad_zero_route }}"
         network_entity_id: "{{ internet_gateway_id }}"
     state: 'present'
-  register: rt_creation_result
 
-- name: "Get OCID of the created RouteTable"
-  ansible.builtin.set_fact:
-    route_table_id: "{{ rt_creation_result.route_table.id }}"
-
-- name: "Create a SecurityList"
+- name: "Update a SecurityList"
   oracle.oci.oci_network_security_list:
     compartment_id: "{{ oci.compartment_id }}"
-    name: "{{ oci.security_list.name }}"
     vcn_id: "{{ vcn_id }}"
+    id: "{{ security_list_id }}"
+    name: "{{ oci.security_list.name }}"
     egress_security_rules:
       - destination: "{{ quad_zero_route }}"
         protocol: "all"
@@ -121,8 +120,3 @@
           destination_port_range:
             max: 32767
             min: 30000
-  register: sl_creation_result
-
-- name: "Get OCID of the created SecurityList"
-  ansible.builtin.set_fact:
-    security_list_id: "{{ sl_creation_result.security_list.id }}"
