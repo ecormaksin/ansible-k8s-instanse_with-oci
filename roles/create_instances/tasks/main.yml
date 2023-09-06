@@ -120,3 +120,13 @@
           destination_port_range:
             max: 32767
             min: 30000
+
+- name: "Create a SubNet"
+  oracle.oci.oci_network_subnet:
+    compartment_id: "{{ oci.compartment_id }}"
+    vcn_id: "{{ vcn_id }}"
+    cidr_block: "{{ oci.subnet.cidr_block }}"
+    dns_label: "{{ oci.subnet.dns.label }}"
+    display_name: "{{ oci.subnet.name }}"
+    route_table_id: "{{ route_table_id }}"
+    security_list_ids: [ "{{ security_list_id }}" ]

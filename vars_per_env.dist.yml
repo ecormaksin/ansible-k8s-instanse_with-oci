@@ -8,3 +8,12 @@ oci:
     dns_label: <vcn_dns_label>
   internet_gateway:
     name: <internet_gateway_name>
+  route_table:
+    name: <route_table_name>
+  security_list:
+    name: <security_list_name>
+  subnet:
+    name: <subnet_name>
+    dns:
+      label: <subnet_dns_label"
+    cidr_block: "10.0.0.0/24"
