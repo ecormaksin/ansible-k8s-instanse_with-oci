@@ -130,3 +130,9 @@
     display_name: "{{ oci.subnet.name }}"
     route_table_id: "{{ route_table_id }}"
     security_list_ids: [ "{{ security_list_id }}" ]
+
+- name: "Create a Compute Instance"
+  oracle.oci.oci_compute_instance:
+    availability_domain: "{{ oci.availability_domain.name }}"
+    compartment_id: "{{ oci.compartment_id }}"
+
