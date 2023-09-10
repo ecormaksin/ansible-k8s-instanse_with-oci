@@ -3,6 +3,8 @@ ansible_ssh_public_key_file: ~/.ssh/id_ed25519.pub
 execute_debug_task: false
 oci:
   compartment_id: <compartment_id>
+  availability_domain:
+    name: "<availability_domain> e.g. ClFL:AP-OSAKA-1-AD-1"
   vcn:
     display_name: "<display_name> e.g. vcn-k8s-01"
     dns_label: "<vcn_dns_label> e.g. vcnk8s01"

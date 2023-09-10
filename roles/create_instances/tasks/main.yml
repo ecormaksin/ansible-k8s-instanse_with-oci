@@ -154,6 +154,13 @@
       network_type: PARAVIRTUALIZED
       remote_data_volume_type: PARAVIRTUALIZED
     metadata:
-      ssh_authorized_keys: "{{ lookup('file',  my_test_public_key ) }}"
+      ssh_authorized_keys: "{{ lookup('file', ansible_ssh_public_key_file ) }}"
     shape: "{{ instance_shape }}"
+    shape_config:
+      memory_in_gbs: 12
+      ocpus: 2
+    source_details:
+      image_id: "{{ image_id }}"
+      source_type: image
+
 
