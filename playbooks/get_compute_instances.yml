@@ -1,0 +1,7 @@
+- name: "Get Compute Instances"
+  hosts: localhost
+
+  tasks:
+    - name: "Get OCI Compute Instances"
+      oracle.oci.oci_compute_instance_facts:
+        compartment_id: "{{ oci.compartment_id }}"
