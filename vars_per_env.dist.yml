@@ -15,5 +15,5 @@ oci:
   subnet:
     name: <subnet_name>
     dns:
-      label: <subnet_dns_label"
+      label: <subnet_dns_label>
     cidr_block: "10.0.0.0/24"

@@ -27,7 +27,7 @@
 
 - Playbookの実行時に `oci python sdk required for this module.` でエラーになり、Ansible設定ファイルの `interpreter_python` へパスを指定する必要があった。(pyenvでPythonをインストールしたため？)
 
-- Ansible Playbookのタスク実行結果の出力(json)を利用するため、`community.general.json_query` を使う。このモジュールはJMESPathを呼び出しているので、コントロラー上にJMESPath(Ubuntuのパッケージマネージャーでは`jq`)が必要。また、Pythonからも参照できる必要があるので、`pip install jmespath`を実行してパッケージをインストールする。
+- Ansible Playbookのタスク実行結果の出力(json)を利用するため、`community.general.json_query` を使う。このモジュールはJMESPathを呼び出しているので、コントロラー上にJMESPath(Ubuntuのパッケージマネージャーでは`jp`)が必要。また、Pythonからも参照できる必要があるので、`pip install jmespath`を実行してパッケージをインストールする。
 
 ## Playbookの実行
 
