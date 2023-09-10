@@ -1,0 +1,7 @@
+- name: "Get VnicAttachments"
+  hosts: localhost
+
+  tasks:
+    - name: "Get VnicAttachments"
+      oracle.oci.oci_compute_vnic_attachment_facts:
+        compartment_id: "{{ oci.compartment_id }}"

@@ -1,0 +1,7 @@
+- name: "Get InternetGateways"
+  hosts: localhost
+
+  tasks:
+    - name: "Get InternetGateways"
+      oracle.oci.oci_network_internet_gateway_facts:
+        compartment_id: "{{ oci.compartment_id }}"

@@ -1,4 +1,3 @@
-work.txt
+work/*
 vars_per_env.yml
-work.json
 playbooks/test.yml

@@ -1,0 +1,7 @@
+- name: "Get VCNs"
+  hosts: localhost
+
+  tasks:
+    - name: "Get OCI VCNs"
+      oracle.oci.oci_network_vcn_facts:
+        compartment_id: "{{ oci.compartment_id }}"

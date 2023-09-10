@@ -1,14 +1,3 @@
-# - name: "Get Vcns"
-#   oracle.oci.oci_network_vcn_facts:
-#     compartment_id: "{{ oci.compartment_id }}"
-#   register: vcn_list
-
-# - name: "Filter the target Vcn"
-#   ansible.builtin.set_fact:
-#     vcn_id: "{{ vcn_list | community.general.json_query(vcn_filter_expression)}}"
-#   vars:
-#     vcn_filter_expression: "vcns[?display_name=='{{ oci.vcn.display_name }}'].id | [0]"
-
 - name: "Create or Update a Vcn"
   oracle.oci.oci_network_vcn:
     compartment_id: "{{ oci.compartment_id }}"
@@ -130,9 +119,41 @@
     display_name: "{{ oci.subnet.name }}"
     route_table_id: "{{ route_table_id }}"
     security_list_ids: [ "{{ security_list_id }}" ]
+  register: subnet_creation_result
 
-- name: "Create a Compute Instance"
+- name: "Get OCID of the Subnet"
+  ansible.builtin.set_fact:
+    subnet_id: "{{ subnet_creation_result.subnet.id }}"
+
+- name: "Create a Compute Instance (k8s controle plane)"
   oracle.oci.oci_compute_instance:
+    agent_config:
+      are_all_plugins_disabled: false
+      plugins_config:
+        - desired_state: DISABLED
+          name: Vulnerability Scanning
+        - desired_state: DISABLED
+          name: Management Agent
+        - desired_state: ENABLED
+          name: Custom Logs Monitoring
+        - desired_state: ENABLED
+          name: Compute Instance Monitoring
+        - desired_state: DISABLED
+          name: Bastion
     availability_domain: "{{ oci.availability_domain.name }}"
     compartment_id: "{{ oci.compartment_id }}"
+    create_vnic_details:
+      assign_public_ip: true
+      hostname_label: "{{ oci.compute.instance.controle_plane.host_name_label }}"
+      subnet_id: "{{ subnet_id }}"
+    display_name: "{{ oci.compute.instance.controle_plane.host_name }}"
+    is_pv_encryption_in_transit_enabled: true
+    launch_options:
+      boot_volume_type: PARAVIRTUALIZED
+      is_consistent_volume_naming_enabled: true
+      network_type: PARAVIRTUALIZED
+      remote_data_volume_type: PARAVIRTUALIZED
+    metadata:
+      ssh_authorized_keys: "{{ lookup('file',  my_test_public_key ) }}"
+    shape: "{{ instance_shape }}"
 
