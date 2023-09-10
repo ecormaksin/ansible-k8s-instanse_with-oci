@@ -4,16 +4,16 @@ execute_debug_task: false
 oci:
   compartment_id: <compartment_id>
   vcn:
-    display_name: <display_name>
-    dns_label: <vcn_dns_label>
+    display_name: "<display_name> e.g. vcnk8s01"
+    dns_label: "<vcn_dns_label> e.g. vcndnslblk8s01"
   internet_gateway:
-    name: <internet_gateway_name>
+    name: "<internet_gateway_name> e.g. igk8s01"
   route_table:
-    name: <route_table_name>
+    name: "<route_table_name> e.g. rtk8s01"
   security_list:
-    name: <security_list_name>
+    name: "<security_list_name> e.g. slk8s01"
   subnet:
-    name: <subnet_name>
+    name: "<subnet_name> e.g. snk8s01"
     dns:
-      label: <subnet_dns_label>
+      label: "<subnet_dns_label> e.g. sndnslblk8s01"
     cidr_block: "10.0.0.0/24"
