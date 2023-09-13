@@ -1,0 +1,9 @@
+- name: "Get Compute Images"
+  hosts: localhost
+
+  tasks:
+    - name: "Get Compute Images"
+      oracle.oci.oci_compute_image_facts:
+        compartment_id: "{{ oci.compartment_id }}"
+        operating_system: "{{ oci.compute.image.operating_system }}"
+        operating_system_version: "{{ oci.compute.image.operating_system_version }}"
