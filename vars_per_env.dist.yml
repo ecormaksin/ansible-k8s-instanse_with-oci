@@ -19,3 +19,11 @@ oci:
     dns:
       label: "<subnet_dns_label> e.g. sndnslblk8s01"
     cidr_block: "10.0.0.0/24"
+  compute:
+    image:
+      operating_system: "Canonical Ubuntu"
+      operating_system_version: "22.04"
+    instance:
+      names:
+        - vm-01 #example
+

@@ -10,6 +10,7 @@
 
         ```shell
         pip install oci
+        pip install oci-cli
         ```
 
     - 構成ファイルを作成する。
